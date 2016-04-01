@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.Frame;
 
+@SuppressWarnings("serial")
 public class SmoothResize extends Frame {
 
 public static void main(String[] args) {

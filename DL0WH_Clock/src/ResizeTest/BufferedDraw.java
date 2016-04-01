@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class BufferedDraw extends JPanel implements MouseListener,
     MouseMotionListener {
   Rectangle rect = new Rectangle(0, 0, 100, 50);
@@ -118,7 +119,8 @@ public class BufferedDraw extends JPanel implements MouseListener,
     g2.drawImage(bi, 0, 0, this);
   }
 
-  private boolean checkRect() {
+  @SuppressWarnings("unused")
+private boolean checkRect() {
     if (area == null) {
       return false;
     }
@@ -157,7 +159,7 @@ public class BufferedDraw extends JPanel implements MouseListener,
 
     f.pack();
     f.setSize(new Dimension(550, 250));
-    f.show();
+    //f.show();
   }
 
 }

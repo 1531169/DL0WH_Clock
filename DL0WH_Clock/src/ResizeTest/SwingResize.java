@@ -3,6 +3,7 @@ package ResizeTest;
 import java.awt.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class SwingResize extends JPanel
 {
     protected void paintComponent(Graphics g)

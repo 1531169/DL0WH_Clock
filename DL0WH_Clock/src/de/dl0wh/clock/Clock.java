@@ -1,11 +1,10 @@
 package de.dl0wh.clock;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.time.LocalTime;
 
@@ -18,12 +17,8 @@ public class Clock extends JComponent {
 	 * TODO: remove magic values!!!!
 	 */
 	
-	private final int clearPoint	= 0,
-					  startPoint	= 23,
-					  padding		= 23,
-					  paddingHour	= 30,
-					  paddingMin	= 15,
-					  paddingSec	= 0;
+	private final int startPoint	= 23,
+					  padding		= 23;
 
 	private RenderingHints hints = new RenderingHints(
 			RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -33,6 +28,7 @@ public class Clock extends JComponent {
 	private boolean isWatchHandHourEnabled		= true;
 	private boolean isWatchHandMinuteEnabled	= true;
 	private boolean isWatchHandSecondEnabled 	= true;
+	private boolean isWatchHandPointsEnabled	= true;
 
 	public Clock() {
 	}
@@ -91,6 +87,12 @@ public class Clock extends JComponent {
 		int y = getMiddleXY() - wH.getY(getFactor());
 		g.setColor(wH.getColor());
 		g.drawLine(getMiddleXY(), getMiddleXY(), x, y);
+		if(isWatchHandPointsEnabled()) {
+			// abstand zur linie abziehen
+			x = getMiddleXY() + wH.getX(getFactor() + wH.getPadding() + getPadding());
+			y = getMiddleXY() - wH.getY(getFactor() + wH.getPadding() + getPadding());
+			g.fillOval(x - (10 / 2), y - (10 / 2), 10, 10);
+		}
 	}
 	
 	void drawTime(Graphics2D g) {
@@ -127,6 +129,11 @@ public class Clock extends JComponent {
 		return getMin() / 2;
 	}
 	
+	Point getCenterPoint() {
+		int xy = getMin() / 2;
+		return new Point(xy, xy);
+	}
+	
 	/**
 	 * --------------------------------------------------
 	 * Control methods for the clock.
@@ -156,14 +163,6 @@ public class Clock extends JComponent {
 	 */
 	
 	/**
-	 * Returns starting point of clearing the component.
-	 * @return the clearPoint
-	 */
-	public int getClearPoint() {
-		return clearPoint;
-	}
-	
-	/**
 	 * Gets graphics of the component.
 	 * @return the graphics
 	 */
@@ -183,27 +182,6 @@ public class Clock extends JComponent {
 	 */
 	public int getPadding() {
 		return padding;
-	}
-	
-	/**
-	 * @return the paddingHour
-	 */
-	public int getPaddingHour() {
-		return paddingHour;
-	}
-
-	/**
-	 * @return the paddingMin
-	 */
-	public int getPaddingMin() {
-		return paddingMin;
-	}
-
-	/**
-	 * @return the paddingSec
-	 */
-	public int getPaddingSec() {
-		return paddingSec;
 	}
 
 	/**
@@ -253,5 +231,19 @@ public class Clock extends JComponent {
 	 */
 	public void setWatchHandSecondEnabled(boolean isWatchHandSecondEnabled) {
 		this.isWatchHandSecondEnabled = isWatchHandSecondEnabled;
+	}
+	
+	/**
+	 * @return the isWatchHandPointsEnabled
+	 */
+	public boolean isWatchHandPointsEnabled() {
+		return isWatchHandPointsEnabled;
+	}
+
+	/**
+	 * @param isWatchHandPointsEnabled the isWatchHandPointsEnabled to set
+	 */
+	public void setWatchHandPointsEnabled(boolean isWatchHandPointsEnabled) {
+		this.isWatchHandPointsEnabled = isWatchHandPointsEnabled;
 	}
 }
