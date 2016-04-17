@@ -1,5 +1,6 @@
 package de.dl0wh.clock;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -12,13 +13,10 @@ import javax.swing.JComponent;
 
 @SuppressWarnings("serial")
 public class Clock extends JComponent {
-	
-	/*
-	 * TODO: remove magic values!!!!
-	 */
-	
-	private final int startPoint	= 23,
-					  padding		= 23;
+	private static final int START_POINT	= 23,
+					  		 PADDING		= 23,
+					  		 TWO			= 2,
+					  		 DEG_CIRCLE		= 360;
 
 	private RenderingHints hints = new RenderingHints(
 			RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -46,8 +44,9 @@ public class Clock extends JComponent {
 		g.setRenderingHints(hints);
 		
 		drawOval(g);
+		drawStripesInFiveMinuteSteps(g);
+		drawStripesInHourSteps(g);
 		drawWatchHands(g);
-		
 		// make transparent
 		//AlphaComposite alpha = AlphaComposite.SrcOver.derive(0.5f);
 		//g.setComposite(alpha);
@@ -56,12 +55,22 @@ public class Clock extends JComponent {
 		g.dispose();
 	}
 	
-	void drawStripsInHourSteps() {
-		// TODO: implement hour stripes
+	void drawStripesInHourSteps(Graphics2D g) {
+		drawStripesByWatchHandType(g, WatchHand.HOURSTROKE);
 	}
 	
-	void drawStripesInFiveMinuteSteps() {
-		// TODO: implement minutes stripes
+	void drawStripesInFiveMinuteSteps(Graphics2D g) {
+		drawStripesByWatchHandType(g, WatchHand.MINUTESTROKE);
+	}
+	
+	private void drawStripesByWatchHandType(Graphics2D g, WatchHand wH) {
+		g.setStroke(WatchHand.BASICSTROKE);
+		g.setColor(wH.getColor());
+		for(int i = 1; i <= DEG_CIRCLE / wH.getDegOfThis(); i++) {
+			Point pStart = wH.getPointByCirclePosition(getMiddleXY(), getRadius(), i);
+			Point pStop  = wH.getPointByCirclePositionFullSize(getMiddleXY(), getRadius(), i);
+			g.drawLine(pStart.x, pStart.y, pStop.x, pStop.y);
+		}
 	}
 	
 	void drawOval(Graphics2D g) {
@@ -83,15 +92,13 @@ public class Clock extends JComponent {
 	}
 	
 	void drawWatchHand(Graphics2D g, WatchHand wH) {
-		int x = getMiddleXY() + wH.getX(getFactor());
-		int y = getMiddleXY() - wH.getY(getFactor());
+		Point p = wH.getPoint(getMiddleXY(), getRadius());
 		g.setColor(wH.getColor());
-		g.drawLine(getMiddleXY(), getMiddleXY(), x, y);
+		g.drawLine(getMiddleXY(), getMiddleXY(), p.x, p.y);
 		if(isWatchHandPointsEnabled()) {
+			Point dP = wH.getDotPoint(getMiddleXY(), getRadius());
 			// abstand zur linie abziehen
-			x = getMiddleXY() + wH.getX(getFactor() + wH.getPadding() + getPadding());
-			y = getMiddleXY() - wH.getY(getFactor() + wH.getPadding() + getPadding());
-			g.fillOval(x - (10 / 2), y - (10 / 2), 10, 10);
+			g.fillOval(dP.x, dP.y, wH.DOTSIZE, wH.DOTSIZE);
 		}
 	}
 	
@@ -119,18 +126,20 @@ public class Clock extends JComponent {
 		return Math.min(getWidth(), getHeight());
 	}
 	
+	int getRadius() {
+		return getDiameter() / TWO;
+	}
+	
 	int getDiameter() {
-		// TODO: remove magic value
-		return getMin() - (2 * getPadding());
+		return getMin() - (TWO * getPadding());
 	}
 	
 	int getMiddleXY() {
-		// TODO: remove magic value
-		return getMin() / 2;
+		return getMin() / TWO;
 	}
 	
 	Point getCenterPoint() {
-		int xy = getMin() / 2;
+		int xy = getMin() / TWO;
 		return new Point(xy, xy);
 	}
 	
@@ -161,27 +170,19 @@ public class Clock extends JComponent {
 	 * Start of getter-methods of final properties.
 	 * --------------------------------------------------
 	 */
-	
-	/**
-	 * Gets graphics of the component.
-	 * @return the graphics
-	 */
-	public Graphics2D getGraphics() {
-		return (Graphics2D)getGraphics();
-	}
 
 	/**
 	 * @return the startPoint
 	 */
 	public int getStartPoint() {
-		return startPoint;
+		return START_POINT;
 	}
 	
 	/**
 	 * @return the padding
 	 */
 	public int getPadding() {
-		return padding;
+		return PADDING;
 	}
 
 	/**
