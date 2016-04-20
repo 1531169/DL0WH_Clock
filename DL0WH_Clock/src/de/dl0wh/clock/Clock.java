@@ -1,6 +1,5 @@
 package de.dl0wh.clock;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -56,19 +55,19 @@ public class Clock extends JComponent {
 	}
 	
 	void drawStripesInHourSteps(Graphics2D g) {
-		drawStripesByWatchHandType(g, WatchHand.HOURSTROKE);
+		drawStripesByWatchStripeType(g, WatchStripe.HOURSTROKE);
 	}
 	
 	void drawStripesInFiveMinuteSteps(Graphics2D g) {
-		drawStripesByWatchHandType(g, WatchHand.MINUTESTROKE);
+		drawStripesByWatchStripeType(g, WatchStripe.MINUTESTROKE);
 	}
 	
-	private void drawStripesByWatchHandType(Graphics2D g, WatchHand wH) {
-		g.setStroke(WatchHand.BASICSTROKE);
-		g.setColor(wH.getColor());
-		for(int i = 1; i <= DEG_CIRCLE / wH.getDegOfThis(); i++) {
-			Point pStart = wH.getPointByCirclePosition(getMiddleXY(), getRadius(), i);
-			Point pStop  = wH.getPointByCirclePositionFullSize(getMiddleXY(), getRadius(), i);
+	private void drawStripesByWatchStripeType(Graphics2D g, WatchStripe wS) {
+		g.setStroke(WatchStripe.BASICSTROKE);
+		g.setColor(wS.getColor());
+		for(int i = 1; i <= DEG_CIRCLE / wS.getDegOfThis(); i++) {
+			Point pStart = wS.getPointByCirclePosition(getMiddleXY(), getRadius(), i);
+			Point pStop  = wS.getPointByCirclePositionFullSize(getMiddleXY(), getRadius(), i);
 			g.drawLine(pStart.x, pStart.y, pStop.x, pStop.y);
 		}
 	}
