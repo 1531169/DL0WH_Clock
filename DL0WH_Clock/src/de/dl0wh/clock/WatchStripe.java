@@ -21,18 +21,18 @@ public enum WatchStripe {
 		this.color 	   = color;
 	}
 	
-	public Point getPointByCirclePositionFullSize(int xyPos, int radius, 
-			int circlePos) {
-		return CirclePointCalculations
-				.getPointByCirclePositionFullSize(xyPos, radius, 
-						circlePos  * getDegOfThis());
-	}
-	
-	public Point getPointByCirclePosition(int xyPos, int radius, 
+	public Point getStartPoint(int xyPos, int radius, 
 			int circlePos) {
 		return CirclePointCalculations
 				.getPointByCirclePosition(xyPos, radius, 
 						circlePos * getDegOfThis(), getFactor());
+	}
+	
+	public Point getEndPoint(int xyPos, int radius, 
+			int circlePos) {
+		return CirclePointCalculations
+				.getPointByCirclePositionFullSize(xyPos, radius, 
+						circlePos  * getDegOfThis());
 	}
 	
 	/**

@@ -17,7 +17,7 @@ class Main extends JFrame {
 					  startPoint	= 0,
 					  minWidth		= 200 - 23, 
 					  minHeight		= 200,
-					  defWidth		= 500 - 23,
+					  defWidth		= 700 - 23,
 					  defHeight		= 500;
 
 	Main() {

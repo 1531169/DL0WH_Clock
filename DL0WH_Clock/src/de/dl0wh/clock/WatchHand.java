@@ -31,9 +31,12 @@ public enum WatchHand {
 	}
 	
 	public Point getDotPoint(int xyPos, int radius) {
-		xyPos -= (DOTSIZE / 2);
-		return CirclePointCalculations
+		//xyPos -= (DOTSIZE / 2);
+		Point p = CirclePointCalculations
 				.getPoint(xyPos, radius, getTime() * getDegOfThis());
+		p.x -= (DOTSIZE / 2);
+		p.y -= (DOTSIZE / 2);
+		return p;
 	}
 
 	private int getTime() {

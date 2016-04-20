@@ -49,7 +49,7 @@ public class Clock extends JComponent {
 		// make transparent
 		//AlphaComposite alpha = AlphaComposite.SrcOver.derive(0.5f);
 		//g.setComposite(alpha);
-		//drawTime(g);
+		drawTime(g);
 		
 		g.dispose();
 	}
@@ -66,8 +66,8 @@ public class Clock extends JComponent {
 		g.setStroke(WatchStripe.BASICSTROKE);
 		g.setColor(wS.getColor());
 		for(int i = 1; i <= DEG_CIRCLE / wS.getDegOfThis(); i++) {
-			Point pStart = wS.getPointByCirclePosition(getMiddleXY(), getRadius(), i);
-			Point pStop  = wS.getPointByCirclePositionFullSize(getMiddleXY(), getRadius(), i);
+			Point pStart = wS.getStartPoint(getMiddleXY(), getRadius(), i);
+			Point pStop  = wS.getEndPoint(getMiddleXY(), getRadius(), i);
 			g.drawLine(pStart.x, pStart.y, pStop.x, pStop.y);
 		}
 	}
@@ -97,24 +97,16 @@ public class Clock extends JComponent {
 		if(isWatchHandPointsEnabled()) {
 			Point dP = wH.getDotPoint(getMiddleXY(), getRadius());
 			// abstand zur linie abziehen
-			g.fillOval(dP.x, dP.y, wH.DOTSIZE, wH.DOTSIZE);
+			g.fillOval(dP.x, dP.y, WatchHand.DOTSIZE, WatchHand.DOTSIZE);
 		}
 	}
 	
 	void drawTime(Graphics2D g) {
-		// TODO: get last things from AnalogDigitalUhr.java
 		// TODO: remove magic value
 		Font f = new Font(Font.SERIF, Font.PLAIN, getMin() / 15);
 		g.setFont(f);
-		g.drawString(getLocalTimeAsString(), getMiddleXY(), getMiddleXY());
-	}
-	
-	String getLocalTimeAsString() {
-		LocalTime now = LocalTime.now();
-		int hh = now.getHour();
-		int mm = now.getMinute();
-		int ss = now.getSecond();
-		return hh + "." + mm + "." + ss;
+		g.drawString(CurrentLocalTime.getFormatInDE(), 
+				getMiddleXY(), getMiddleXY());
 	}
 	
 	int getFactor() {
